@@ -1,0 +1,24 @@
+{
+	"name": "shb-ext-demo",
+	"displayName": "shb-ext-demo",
+	"description": "生花笔插件演示",
+	"version": "0.0.4",
+	"publisher": "wszgrcy",
+	"repository": "https://github.com/wszgrcy/shb-ext-demo",
+	"engines": {
+		"vscode": "^1.103.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"extensionDependencies": [
+		"wszgrcy.shenghuabi"
+	],
+	"activationEvents": [
+		"*"
+	],
+	"main": "./index.js",
+	"contributes": {
+		"commands": []
+	}
+}

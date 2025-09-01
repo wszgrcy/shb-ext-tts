@@ -1,0 +1,36 @@
+{
+	"name": "shb-ext-demo",
+	"description": "shb插件演示",
+	"version": "0.0.0",
+	"repository": "https://github.com/wszgrcy/shb-ext-demo",
+	"scripts": {
+		"compile": "tsx ./script/build.ts",
+		"compile:prod": "tsx ./script/build.ts --prod",
+		"lint": "eslint",
+		"watch": "tsc -watch -p ./",
+		"local-publish": "rimraf ./dist && npm run compile:prod && cd dist && vsce package --skip-license --allow-star-activation"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.13.0",
+		"@stylistic/eslint-plugin": "^2.9.0",
+		"@types/node": "^20.17.24",
+		"@types/vscode": "^1.73.0",
+		"@vscode/vsce": "3.6.0",
+		"esbuild": "^0.25.5",
+		"esbuild-plugin-copy": "^2.1.1",
+		"esbuild-plugin-external-global": "^1.0.1",
+		"eslint": "^9.13.0",
+		"fast-glob": "^3.3.3",
+		"rimraf": "^6.0.1",
+		"tsx": "^4.19.3",
+		"typescript": "^5.8.2",
+		"typescript-eslint": "^8.26.0"
+	},
+	"dependencies": {
+		"@piying/view-angular": "^1.5.8",
+		"@shenghuabi/sdk": "^0.2.0",
+		"duck-duck-scrape": "^2.2.7",
+		"rxjs": "7.8.1",
+		"valibot": "1.1.0"
+	}
+}
