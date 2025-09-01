@@ -1,10 +1,10 @@
 {
-	"name": "shb-ext-demo",
-	"displayName": "shb-ext-demo",
-	"description": "生花笔插件演示",
-	"version": "0.0.4",
+	"name": "shb-tts",
+	"displayName": "shb-tts",
+	"description": "生花笔tts-文本生成语音插件",
+	"version": "0.0.1",
 	"publisher": "wszgrcy",
-	"repository": "https://github.com/wszgrcy/shb-ext-demo",
+	"repository": "https://github.com/wszgrcy/shb-ext-tts",
 	"engines": {
 		"vscode": "^1.103.0"
 	},

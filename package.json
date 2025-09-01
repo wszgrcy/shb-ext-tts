@@ -1,8 +1,7 @@
 {
-	"name": "shb-ext-demo",
-	"description": "shb插件演示",
+	"name": "shb-ext-tts",
 	"version": "0.0.0",
-	"repository": "https://github.com/wszgrcy/shb-ext-demo",
+	"repository": "https://github.com/wszgrcy/shb-ext-tts",
 	"scripts": {
 		"compile": "tsx ./script/build.ts",
 		"compile:prod": "tsx ./script/build.ts --prod",
@@ -13,23 +12,23 @@
 	"devDependencies": {
 		"@eslint/js": "^9.13.0",
 		"@stylistic/eslint-plugin": "^2.9.0",
-		"@types/node": "^20.17.24",
-		"@types/vscode": "^1.73.0",
+		"@types/node": "^22.0.0",
+		"@types/vscode": "^1.103.0",
 		"@vscode/vsce": "3.6.0",
-		"esbuild": "^0.25.5",
+		"esbuild": "^0.25.9",
 		"esbuild-plugin-copy": "^2.1.1",
 		"esbuild-plugin-external-global": "^1.0.1",
 		"eslint": "^9.13.0",
 		"fast-glob": "^3.3.3",
 		"rimraf": "^6.0.1",
-		"tsx": "^4.19.3",
+		"tsx": "^4.20.5",
 		"typescript": "^5.8.2",
 		"typescript-eslint": "^8.26.0"
 	},
 	"dependencies": {
 		"@piying/view-angular": "^1.5.8",
-		"@shenghuabi/sdk": "^0.2.0",
-		"duck-duck-scrape": "^2.2.7",
+		"@shenghuabi/sdk": "^0.3.2",
+		"@siakhooi/number-to-chinese-words": "^1.12.4",
 		"rxjs": "7.8.1",
 		"valibot": "1.1.0"
 	}
