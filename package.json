@@ -7,9 +7,11 @@
 		"compile:prod": "tsx ./script/build.ts --prod",
 		"lint": "eslint",
 		"watch": "tsc -watch -p ./",
-		"local-publish": "rimraf ./dist && npm run compile:prod && cd dist && vsce package --skip-license --allow-star-activation"
+		"local-publish": "rimraf ./dist && npm run compile:prod && cd dist && vsce package --skip-license --allow-star-activation",
+		"auto-publish": "tsx ./script/auto-publish.ts"
 	},
 	"devDependencies": {
+		"@actions/core": "^1.11.1",
 		"@eslint/js": "^9.13.0",
 		"@stylistic/eslint-plugin": "^2.9.0",
 		"@types/node": "^22.0.0",
@@ -19,6 +21,7 @@
 		"esbuild-plugin-copy": "^2.1.1",
 		"esbuild-plugin-external-global": "^1.0.1",
 		"eslint": "^9.13.0",
+		"execa": "^9.6.0",
 		"fast-glob": "^3.3.3",
 		"rimraf": "^6.0.1",
 		"tsx": "^4.20.5",
