@@ -2,7 +2,7 @@ import { version, name } from '../assets/package.json';
 import * as core from '@actions/core';
 export async function main() {
   let { $ } = await import('execa');
-  let result2 = await $`git ls-remote --tags --exit-code origin refs/tags/${version}`;
+  let result2 = await $({ reject: false })`git ls-remote --tags --exit-code origin refs/tags/${version}`;
   console.log(result2);
   if (result2.stdout) {
     return;

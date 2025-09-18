@@ -30,7 +30,7 @@
 	},
 	"dependencies": {
 		"@piying/view-angular": "^1.5.8",
-		"@shenghuabi/sdk": "^0.3.2",
+		"@shenghuabi/sdk": "^0.3.8",
 		"@siakhooi/number-to-chinese-words": "^1.12.4",
 		"rxjs": "7.8.1",
 		"valibot": "1.1.0"

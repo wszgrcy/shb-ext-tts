@@ -3,7 +3,5 @@
     "include": [
         "**/*.ts"
     ],
-    "compilerOptions": {
-        "rootDir": "./"
-    }
+    "compilerOptions": {}
 }

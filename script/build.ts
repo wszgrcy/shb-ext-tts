@@ -2,6 +2,8 @@ import * as esbuild from 'esbuild';
 import * as path from 'path';
 import { copy } from 'esbuild-plugin-copy';
 import { sync } from 'fast-glob';
+import { setConfigToPackageJson } from '@shenghuabi/sdk/build';
+import { ExtensionConfigDefine } from '../src/config-define';
 const CommonConfig: esbuild.BuildOptions = {
   platform: 'node',
   bundle: true,
@@ -56,6 +58,7 @@ async function main() {
   } else {
     await Promise.all([esbuild.build(options), esbuild.build(clientOptions)]);
   }
+  await setConfigToPackageJson(path.join(process.cwd(), 'dist', 'package.json'), ExtensionConfigDefine);
 
   console.log('构建完成');
 }
