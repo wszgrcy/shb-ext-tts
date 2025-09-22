@@ -6,7 +6,7 @@
 	"publisher": "wszgrcy",
 	"repository": "https://github.com/wszgrcy/shb-ext-tts",
 	"engines": {
-		"vscode": "^1.103.21"
+		"vscode": "^1.103.22"
 	},
 	"categories": [
 		"Other"
