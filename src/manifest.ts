@@ -1,4 +1,4 @@
-import { ManifestFactoy, NormalCollectionInlineType } from '@shenghuabi/sdk/server';
+import { ManifestFactoy } from '@shenghuabi/sdk/server';
 import { convertNumber } from '@siakhooi/number-to-chinese-words';
 import { ExtensionConfig } from './config';
 import { llmParseToTTSRunner } from './workflow/node/llm-parse-to-tts/server';
@@ -10,7 +10,7 @@ function number2Han(input: number) {
     .join('');
 }
 // 不推荐变更此导出,未来可能会在其他地方使用
-export const manifestFactory = (options: any): ManifestFactoy => {
+export const manifestFactory = (_: any): ManifestFactoy => {
   return (input) => {
     return {
       workflow: {
@@ -41,7 +41,7 @@ export const manifestFactory = (options: any): ManifestFactoy => {
           {
             name: '数字转中文',
             fn: async (item) => {
-              let content = item.generateOptions.audioText ?? item.subtitle.text;
+              const content = item.generateOptions.audioText ?? item.subtitle.text;
               item.generateOptions.audioText = content.replace(/\d+/g, (input) => {
                 console.log(input);
                 return convertNumber(+input);
@@ -53,11 +53,11 @@ export const manifestFactory = (options: any): ManifestFactoy => {
             name: 'GB国标',
             priority: 1,
             fn: async (item) => {
-              let content = item.generateOptions.audioText ?? item.subtitle.text;
+              const content = item.generateOptions.audioText ?? item.subtitle.text;
               item.generateOptions.audioText = content.replace(
                 /(GB)\s?(?<index>\d+)(?<part>\.\d+)?(?<gang>—|-)(?<year>\d{4})/g,
                 (input, ...args) => {
-                  let group = args.slice(-1)[0];
+                  const group = args.slice(-1)[0];
                   let str = `国标${number2Han(group['index'])}`;
                   if (group['part']) {
                     str += `点${number2Han(group['part'].slice(1))}`;
@@ -88,7 +88,7 @@ export const manifestFactory = (options: any): ManifestFactoy => {
             fn: async (item) => {
               let content = item.generateOptions.audioText ?? item.subtitle.text;
               for (const item of ExtensionConfig.regReplaceList()) {
-                let regexp = new RegExp(item.find.pattern, item.find.flags);
+                const regexp = new RegExp(item.find.pattern, item.find.flags);
                 content = content.replace(regexp, item.replace);
               }
               item.generateOptions.audioText = content;

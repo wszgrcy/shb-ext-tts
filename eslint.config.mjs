@@ -7,8 +7,28 @@
 import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 import stylistic from '@stylistic/eslint-plugin';
+import unusedImports from 'eslint-plugin-unused-imports';
 
 export default tseslint.config(
+	{
+		files: ['**/*.{js,mjs,cjs,ts,tsx}'],
+		plugins: {
+			'unused-imports': unusedImports,
+		},
+		rules: {
+			'no-unused-vars': 'off',
+			'unused-imports/no-unused-imports': 'warn',
+			'unused-imports/no-unused-vars': [
+				'warn',
+				{
+					vars: 'all',
+					varsIgnorePattern: '^_',
+					args: 'after-used',
+					argsIgnorePattern: '^_',
+				},
+			],
+		},
+	},
 	{
 		ignores: [
 			'.vscode-test',
@@ -23,6 +43,7 @@ export default tseslint.config(
 			'@stylistic': stylistic
 		},
 		rules: {
+			'@typescript-eslint/no-explicit-any': 'off',
 			'curly': 'warn',
 			'@stylistic/semi': ['warn', 'always'],
 			'@typescript-eslint/no-empty-function': 'off',
