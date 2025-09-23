@@ -24,7 +24,7 @@ jobs:
         id: build
       - name: Calculate SHA256
         run: |
-          SHA256_HASH=$(shasum -a 256 ./dist/tts-${{steps.build.outputs.VERSION}} | awk '{print $1}')
+          SHA256_HASH=$(shasum -a 256 ./dist/tts-${{steps.build.outputs.VERSION}}.vsix | awk '{print $1}')
           echo "$SHA256_HASH" > sha256.txt
       - name: Release
         uses: softprops/action-gh-release@v2
