@@ -3,7 +3,6 @@ import { NODE_DEFINE } from '../common/define';
 import * as v from 'valibot';
 import { unionBy } from 'es-toolkit';
 import { toJsonSchema } from '@valibot/to-json-schema';
-const Prompt = `你是一个专业的编剧,请将输入文本转换为指定的格式用于配音\n请根据给予的配音选项为不同的文字段落提供不同的配音`;
 
 export function llmParseToTTSRunner(input: ManifestInput) {
   return class extends input.provider.workflow.NodeRunnerBase {
@@ -20,28 +19,37 @@ export function llmParseToTTSRunner(input: ManifestInput) {
         }
         const chatInput = this.#chatUtil.interpolate(data.data.value, this.inputValueObject$$());
 
-        const queue = await ttsService.getByCustom({ filePath: '', content: chatInput }, async (content, options) => {
+        const queue = await ttsService.getByCustom(async (options) => {
+          const itemToString = (item: any) => `${item.player}-${item.state}-${item.language}`;
           const voiceList = options.voiceList.map((item) => {
             return {
-              player: item.player!,
-              state: item.state!,
-              language: item.language!,
+              item: item,
+              value: {
+                player: item.player!,
+                state: item.state!,
+                language: item.language!,
+              },
+              key: itemToString(item),
             };
           });
           const emoList = (options.indextTTSEmoList ?? []).map((item) => {
             return {
-              player: item.player!,
-              state: item.state!,
-              language: item.language!,
+              item: item,
+              value: {
+                player: item.player!,
+                state: item.state!,
+                language: item.language!,
+              },
+              key: itemToString(item),
             };
           });
-          const itemToString = (item: any) => `${item.player}-${item.state}-${item.language}`;
-          const list = unionBy(voiceList, emoList, itemToString);
+          console.log(voiceList, emoList);
+          const list = unionBy(voiceList, emoList as any, (item) => item.key);
 
           const audioItemDefine = v.object({
             text: v.pipe(v.string(), v.title('需要配音的文本')),
             actor: v.pipe(
-              v.picklist(list.map(itemToString)),
+              v.picklist(list.map((item) => item.key)),
               v.title('配音表'),
               v.description('当前文本可以使用的配音项,请根据说话人,语言和情绪进行选择')
             ),
@@ -49,6 +57,10 @@ export function llmParseToTTSRunner(input: ManifestInput) {
           const define = v.object({ list: v.array(audioItemDefine) });
           const strSchema = toJsonSchema(define);
           console.log(strSchema);
+          const systemPrompt = this.#chatUtil.interpolate(data.data.prompt, {
+            ...this.inputValueObject$$(),
+            __JsonSchema: JSON.stringify(strSchema),
+          });
           const res = await (
             await instance.chat()
           ).chat(
@@ -56,7 +68,7 @@ export function llmParseToTTSRunner(input: ManifestInput) {
               messages: [
                 {
                   role: 'system',
-                  content: [{ text: [Prompt, `## 格式`, JSON.stringify(strSchema)].join('\n'), type: 'text' }],
+                  content: [{ text: systemPrompt, type: 'text' }],
                 },
                 { role: 'user', content: [{ text: chatInput, type: 'text' }] },
               ],
@@ -69,25 +81,27 @@ export function llmParseToTTSRunner(input: ManifestInput) {
           console.log(result);
           return result.list.map((gItem) => {
             let voiceItem = voiceList.find((item) => {
-              return itemToString(item) === gItem.actor;
-            });
+              return item.key === gItem.actor;
+            })?.value;
             const emoItem = emoList.find((item) => {
-              return itemToString(item) === gItem.actor;
-            });
+              return item.key === gItem.actor;
+            })?.value;
             if (emoItem && !voiceItem) {
+              const defaultActorKey = gItem.actor.replace(`-[^-]+-`, `-default-`);
               voiceItem = voiceList.find((item) => {
-                return itemToString(item) === gItem.actor.replace(`-[^-]+-`, `-default-`);
-              });
+                return item.key === defaultActorKey;
+              })?.value;
               if (!voiceItem) {
-                throw new Error(`${gItem.actor}未找到默认状态的语音,请设置默认语音`);
+                throw new Error(`${gItem.actor}未找到默认状态的语音,请设置默认语音;${defaultActorKey}`);
               }
             }
+            console.log(voiceItem, emoItem);
             return {
               item: {
                 subtitle: { text: gItem.text },
                 generateOptions: {
-                  reference: { preset: voiceItem! },
-                  emo: { preset: emoItem ?? voiceItem! },
+                  reference: { preset: voiceItem!! },
+                  emo: emoItem ? { preset: emoItem } : { emo_alpha: 1 },
                 },
                 audioOptions: { isParagraph: false },
               },
