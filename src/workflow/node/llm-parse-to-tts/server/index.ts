@@ -115,7 +115,7 @@ export function llmParseToTTSRunner(input: ManifestInput) {
         if (data.data.config.autoStopLLM) {
           await llmLauncher.stop();
         }
-        return { value: queue.config as any };
+        return { value: queue.getConfig() as any };
       };
     }
   };

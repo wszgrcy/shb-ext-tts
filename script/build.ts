@@ -48,6 +48,10 @@ async function main() {
       ...sync('./workflow/node/**/client/index.ts', { cwd: './src' }).map((item) => {
         return { in: path.join('src', item), out: path.join('', item.slice(0, -3)) };
       }),
+      {
+        in: './src/config-define.ts',
+        out: './config-define',
+      },
     ],
     outdir: OUT_DIR,
     minify: PROD_ENV,

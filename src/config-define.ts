@@ -20,3 +20,5 @@ export const ExtensionConfigDefine = v.object({
     v.description('用于替换插件使用,正则表达式替换')
   ),
 });
+
+export default ExtensionConfigDefine
