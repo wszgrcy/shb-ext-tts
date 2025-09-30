@@ -32,7 +32,10 @@ async function main() {
     plugins: [
       copy({
         resolveFrom: 'cwd',
-        assets: [{ from: './assets/*', to: './dist' }],
+        assets: [
+          { from: './assets/*', to: './dist' },
+          { from: './assets/.vscodeignore', to: './dist' },
+        ],
       }),
     ],
     define: {},
