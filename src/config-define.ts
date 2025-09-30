@@ -21,7 +21,7 @@ export const ExtensionConfigDefine = v.pipe(
           v.pipe(
             v.object({
               find: v.pipe(
-                v.object({ pattern: v.string(), flags: v.pipe(v.optional(v.string()),topClass('w-[100px]')) }),
+                v.object({ pattern: v.string(), flags: v.pipe(v.optional(v.string()), topClass('w-[100px]')) }),
                 v.title('匹配字符串'),
                 componentClass('flex gap-2 items-center *:nth-1:flex-1')
               ),
@@ -50,7 +50,7 @@ export const ExtensionConfigDefine = v.pipe(
         __download: v.pipe(
           NFCSchema,
           setComponent('download-button'),
-          patchInputs({ strip: 1, autoUnzip: true }),
+          patchInputs({ autoUnzip: true }),
           patchAsyncInputs({
             fileList: (field) => {
               let url = field.get(['..', 'url'])!;

@@ -1,8 +1,8 @@
 {
 	"name": "tts",
-	"displayName": "tts",
+	"displayName": "文本生成语音",
 	"description": "生花笔tts-文本生成语音插件",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"publisher": "wszgrcy",
 	"repository": "https://github.com/wszgrcy/shb-ext-tts",
 	"engines": {
