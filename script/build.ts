@@ -1,9 +1,7 @@
 import * as esbuild from 'esbuild';
 import * as path from 'path';
 import { copy } from 'esbuild-plugin-copy';
-import { sync } from 'fast-glob';
-import { setConfigToPackageJson } from '@shenghuabi/sdk/build';
-import { ExtensionConfigDefine } from '../src/config-define';
+import glob from 'fast-glob';
 const CommonConfig: esbuild.BuildOptions = {
   platform: 'node',
   bundle: true,
@@ -18,6 +16,8 @@ const CommonConfig: esbuild.BuildOptions = {
 };
 // 发布之前构建
 async function main() {
+  let { setConfigToPackageJson } = await import('@shenghuabi/sdk/build');
+  let { ExtensionConfigDefine } = await import('../src/config-define');
   const watch = process.argv.includes('--watch');
   const PROD_ENV = process.argv.includes('--prod');
   const cwd = process.cwd();
@@ -35,9 +35,11 @@ async function main() {
         assets: [
           { from: './assets/*', to: './dist' },
           { from: './assets/.vscodeignore', to: './dist' },
+          // { from: 'node_modules/@shenghuabi/sdk/public/*', to: './dist' },
         ],
       }),
     ],
+    // outExtension: { '.js': '.mjs' },
     define: {},
   };
   const clientOptions: esbuild.BuildOptions = {
@@ -45,7 +47,7 @@ async function main() {
     platform: 'browser',
     format: 'esm',
     entryPoints: [
-      ...sync('./workflow/node/**/client/index.ts', { cwd: './src' }).map((item) => {
+      ...glob.sync('./workflow/node/**/client/index.ts', { cwd: './src' }).map((item) => {
         return { in: path.join('src', item), out: path.join('', item.slice(0, -3)) };
       }),
       {

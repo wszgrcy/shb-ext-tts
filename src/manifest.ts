@@ -2,6 +2,8 @@ import { ManifestFactoy } from '@shenghuabi/sdk/server';
 import { convertNumber } from '@siakhooi/number-to-chinese-words';
 import { ExtensionConfig } from './config';
 import { llmParseToTTSRunner } from './workflow/node/llm-parse-to-tts/server';
+import path from 'path';
+import { mergeWavAfCommand } from './util/ffmpeg';
 const HanNumberList = '零一二三四五六七八九'.split('');
 function number2Han(input: number) {
   return `${input}`
@@ -43,7 +45,6 @@ export const manifestFactory = (_: any): ManifestFactoy => {
             fn: async (item) => {
               const content = item.generateOptions.audioText ?? item.subtitle.text;
               item.generateOptions.audioText = content.replace(/\d+/g, (input) => {
-                console.log(input);
                 return convertNumber(+input);
               });
               return item;
@@ -95,6 +96,39 @@ export const manifestFactory = (_: any): ManifestFactoy => {
               return item;
             },
           },
+        ],
+        beforeConcatList: [
+          {
+            name: 'ffmpeg滤镜',
+            fn: async (inputList, config) => {
+              let workspaceService = input.provider.root.injector.get(input.provider.root.WorkspaceService);
+              let execPath = path.join(
+                path.resolve(workspaceService.nFolder(), ExtensionConfig.ffmpeg.dir()),
+                ExtensionConfig.ffmpeg.execPath()
+              );
+              let { $ } = await import('execa');
+              for (const item of inputList) {
+                for (const element of item) {
+                  if (element.type === 'file') {
+                    let filePath = element.filePath;
+                    let outputPath = element.filePath.replace(/\.wav$/, '.af.wav');
+                    let commandList = mergeWavAfCommand(ExtensionConfig.ffmpeg.af(), filePath, outputPath);
+                    await $({})(execPath, commandList);
+                    element.filePath = outputPath;
+                  }
+                }
+              }
+              return inputList;
+            },
+          },
+        ],
+        afterConcatList: [
+          // {
+          //   name: 'test',
+          //   fn: async (input) => {
+          //     return input;
+          //   },
+          // },
         ],
       },
     };
