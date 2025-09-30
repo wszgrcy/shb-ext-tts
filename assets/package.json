@@ -2,11 +2,11 @@
 	"name": "tts",
 	"displayName": "文本生成语音",
 	"description": "生花笔tts-文本生成语音插件",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"publisher": "wszgrcy",
 	"repository": "https://github.com/wszgrcy/shb-ext-tts",
 	"engines": {
-		"vscode": "^1.103.39"
+		"vscode": "^1.103.40"
 	},
 	"categories": [
 		"Other"
